@@ -6,12 +6,18 @@ const yaml = require('js-yaml');
 var accounts;
 var owner;
 
-contract('StarNotary', (accs) => {
+contract('StarNotary', (accs) => {  
+
+    console.log('TEST : StarNotary');
+
     accounts = accs;
     owner = accounts[0];
 });
 
-it('can Create a Star', async() => {
+it('can Create a Star', async() => {   
+
+    console.log('TEST : can Create a Star');
+
     let tokenId = 1;
     let instance = await StarNotary.deployed();
     await instance.createStar('Awesome Star!', tokenId, {from: accounts[0]})
@@ -19,6 +25,9 @@ it('can Create a Star', async() => {
 });
 
 it('lets user1 put up their star for sale', async() => {
+    
+    console.log('TEST : lets user1 put up their star for sale');
+
     let instance = await StarNotary.deployed();
     let user1 = accounts[1];
     let starId = 2;
@@ -29,6 +38,9 @@ it('lets user1 put up their star for sale', async() => {
 });
 
 it('lets user1 get the funds after the sale', async() => {
+    
+    console.log('TEST : lets user1 get the funds after the sale');
+
     let instance = await StarNotary.deployed();
     let user1 = accounts[1];
     let user2 = accounts[2];
@@ -46,6 +58,9 @@ it('lets user1 get the funds after the sale', async() => {
 });
 
 it('lets user2 buy a star, if it is put up for sale', async() => {
+    
+    console.log('TEST : lets user2 buy a star, if it is put up for sale');
+
     let instance = await StarNotary.deployed();
     let user1 = accounts[1];
     let user2 = accounts[2];
@@ -60,6 +75,9 @@ it('lets user2 buy a star, if it is put up for sale', async() => {
 });
 
 it('lets user2 buy a star and decreases its balance in ether', async() => {
+
+    console.log('TEST : lets user2 buy a star and decreases its balance in ether');
+
     let instance = await StarNotary.deployed();
     let user1 = accounts[1];
     let user2 = accounts[2];
@@ -79,29 +97,36 @@ it('lets user2 buy a star and decreases its balance in ether', async() => {
 // Implement Task 2 Add supporting unit tests
 
 it('can add the star name and star symbol properly', async() => {
+
+    console.log('TEST : can add the star name and star symbol properly');
+
     // 1. create a Star with different tokenId
     let instance = await StarNotary.deployed();
+    let user1 = accounts[1];
     let starId = 6;
     await instance.createStar('awesome star test', starId, {from: user1});
     // 2. Call the name and symbol properties in your Smart Contract and compare with the name and symbol provided
     // get from yml file
-    let fileContents = fs.readFileSync('./properties.yml', 'utf8');
-    let data = yaml.safeLoad(fileContents);
-    let starTokenName = data.starToken.name;
-    let starTokenSymbol = data.starToken.symbol;
+    //let fileContents = fs.readFileSync('./properties.yml', 'utf8');
+    //let data = yaml.safeLoad(fileContents);
+    let starTokenName = "StarNotaryToken"; //data.starToken.name;
+    let starTokenSymbol = "SNT"; //data.starToken.symbol;
 
     console.log(`StarToken properties got name : ${starTokenName} and symbol : ${starTokenSymbol}`);
 
-    assert.equal(await instance.getName().call(), data.starToken.name);
-    assert.equal(await instance.getSymbol().call(), data.starToken.symbol);
+    assert.equal(await instance.getName(), starTokenName);
+    assert.equal(await instance.getSymbol(), starTokenSymbol);
 
 });
 
 it('lets 2 users exchange stars', async() => {
+
+    console.log('TEST : lets 2 users exchange stars');
+
     // 1. create 2 Stars with different tokenId
     let instance = await StarNotary.deployed();
-    let user1 = accounts[1];
-    let user2 = accounts[2];
+    let user1 = accounts[0];
+    let user2 = accounts[1];
 
     let starId1 = 10;
     await instance.createStar('awesome star test with id ', starId1, {from: user1});
@@ -118,12 +143,14 @@ it('lets 2 users exchange stars', async() => {
     await instance.exchangeStars(starId1, starId2);
 
     // 3. Verify that the owners changed
-    assert.equal(await instance.ownerOf(tokenId1), user2);
-    assert.equal(await instance.ownerOf(tokenId2), user1);
+    assert.equal(await instance.ownerOf(starId1), user2);
+    assert.equal(await instance.ownerOf(starId2), user1);
 });
 
 it('lets a user transfer a star', async() => {
     
+    console.log('TEST : start test : lets a user transfer a star');
+
     let instance = await StarNotary.deployed();
     let user1 = accounts[1];
     let user2 = accounts[2];
@@ -137,13 +164,16 @@ it('lets a user transfer a star', async() => {
 
     // 2. use the transferStar function implemented in the Smart Contract
     // function transferStar(address _to1, uint256 _tokenId)
-    await transferStar(user2, starId1);
+    await instance.transferStar(user2, starId1, {from: user1});
 
     // 3. Verify the star owner changed.
     assert.equal(await instance.ownerOf(starId1), user2);
 });
 
 it('lookUptokenIdToStarInfo test', async() => {
+
+    console.log('TEST : start test : lookUptokenIdToStarInfo');
+
     let instance = await StarNotary.deployed();
     let user1 = accounts[1];
 

@@ -44,8 +44,8 @@ const App = {
     const { lookUptokenIdToStarInfo } = this.meta.methods;
     const id = document.getElementById("lookid").value;
     //function lookUptokenIdToStarInfo (uint _tokenId) public view returns (string memory)
-    let startInfo = await lookUptokenIdToStarInfo(id).call();
-    App.setStatus("startInfo from lookUp" + startInfo + ".");
+    let StarInfo = await lookUptokenIdToStarInfo(id).call();
+    App.setStatus(`lookUptokenIdToStarInfo answer : ${StarInfo}`);
   }
 
 };

@@ -26,19 +26,36 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 
 const HDWallet = require('truffle-hdwallet-provider');
+
+const getReadFileSync = () => {
+  // depends if you start from app path or out
+  let readFileSyncVar;
+  try {
+    readFileSyncVar = fs.readFileSync('./resource/secret_properties.yml', 'utf8');
+  } catch(error) {
+    // silent exception to catch from resource or app/resource
+    // console.log('Not found on ./resource/secret_properties.yml, try on ./app/resource/secret_properties.yml');
+    readFileSyncVar = fs.readFileSync('./app/resource/secret_properties.yml', 'utf8');
+  }
+  
+  return readFileSyncVar;
+}
+
 const getInfuraKey = () => {
-  let fileContents = fs.readFileSync('./resource/secret_properties.yml', 'utf8');
+  let fileContents = getReadFileSync();
   let data = yaml.load(fileContents);
   let infuraKey = data.infura.private_key;
+  //console.log(`infuraKey : ${infuraKey}`);
   return infuraKey;
 }//"fj4jll3k.....";
 //
  //const fs = require('fs');
  //const mnemonic = fs.readFileSync(".secret").toString().trim();
  const getMnemonicKey = () => {
-  let fileContents = fs.readFileSync('./resource/secret_properties.yml', 'utf8');
+  let fileContents = getReadFileSync();
   let data = yaml.load(fileContents);
-  let mnemonic = data.mnemonic;
+  let mnemonic = data.mnemonic_keywords;
+  //console.log(`mnemonic : ${mnemonic}`);
   return mnemonic;
 }
  mnemonic = getMnemonicKey();

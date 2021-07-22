@@ -15,14 +15,14 @@ contract StarNotary is ERC721 {
     // name: Is a short name to your token
     // symbol: Is a short string like 'USD' -> 'American Dollar'
     string constant private name = "StarNotaryToken";
-    bytes3 constant private symbol = "SNT";
+    string constant private symbol = "SNT";
 
     // get methods
     function getName() public pure returns (string memory) {
         return name;
     }
 
-    function getSymbol() public pure returns (bytes3) {
+    function getSymbol() public pure returns (string memory) {
         return symbol;
     }
 
